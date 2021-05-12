@@ -1,38 +1,79 @@
-.App {
-  text-align: center;
+
+/*  ALL ELEMENTS */
+body {
+    text-align: center;
+    background-color: antiquewhite;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.fixed-bottom {
+    bottom: 3rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container {
+    margin-left: 0;
+    margin-right: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.text-left {
+    text-align: left !important;
 }
 
-.App-link {
-  color: #61dafb;
+/*  HEADER  */
+.heading {
+    color: white;
+    text-align: left;
+    padding-left: 3%;
+    font-size: 2rem;
+    font-family: "Itim",cursive;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.heading-container {
+    padding: 0.5% 0;
+    background-color: orange;
+}
+
+/*  Body.js */
+.body-container {
+    position: relative;
+}
+
+/*  Model.js */
+.upload-data {
+    border-width: 2px;
+    border: solid #dee2e6!important;
+    margin-top: 1rem;
+    padding: 2rem 1.5rem 1.5rem;
+}
+
+.models {
+    height: 25%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+/*  ModelTable.js  */
+.model-table {
+    font-size: 1rem;
+}
+
+/*  ModelCard.js  */
+.model-card-container {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: whitesmoke;
+    padding: .35em .65em;
+    margin: 0.15rem;
+}
+
+/*  Footer.js  */
+.footer-container {
+    position: relative;
+}
+
+.footer {
+    position:absolute;
+    color: gray;
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
