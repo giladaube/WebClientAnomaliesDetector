@@ -18,6 +18,10 @@ body {
     text-align: left !important;
 }
 
+.text-right {
+    text-align: right !important;
+}
+
 /*  HEADER  */
 .heading {
     color: white;
@@ -37,6 +41,19 @@ body {
     position: relative;
 }
 
+/*  AlertMessage.js  */
+.alert-container {
+    z-index: 10;
+    min-height: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.toast-header {
+    justify-content: space-between;
+}
+
 /*  Model.js */
 .upload-data {
     border-width: 2px;
@@ -46,9 +63,8 @@ body {
 }
 
 .models {
-    height: 25%;
-    margin-left: 15%;
-    margin-right: 15%;
+    height: 20rem;
+    padding-top: 1rem;
 }
 
 /*  ModelTable.js  */
@@ -58,7 +74,8 @@ body {
 
 /*  ModelCard.js  */
 .model-card-container {
-    font-size: 0.75rem;
+    font-size: 0.95rem;
+    font-stretch: condensed;
     line-height: 1.5;
     font-weight: 500;
     color: whitesmoke;

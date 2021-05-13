@@ -6,7 +6,7 @@ function ModelTable(props) {
     return (
 
         <div className="container model-table">
-            <div className="row p-2 row-cols-auto">
+            <div className="">
 
                 {props.cards.map(card => {
                     return (

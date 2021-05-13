@@ -12,7 +12,7 @@
 
     function checkStatus(models, addModel, popMessage, updatePopMessage, model, callback) {
         let url = new URL("http://localhost:9876/api/model"),
-                        params = {model_id: model.id}
+                        params = {model_id: model.model_id}
                         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
         fetch(url, {
                 method: "GET",
@@ -36,7 +36,7 @@
                 return null;
             })
             .catch(error => {
-                if (!popMessage.isAlter) {
+                if (!popMessage.isAlert) {
                     updatePopMessage(true, "We got some bad news..", "there is a failure connection with API server. Please try again later.");
                 }
             });

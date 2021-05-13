@@ -24,10 +24,9 @@ function UploadFile(props) {
                         dataInCorrectForm[key].push(json[key])    // can convert the value to float with parseFloat(value) if needed
                     }
                 })
-                props.callback(JSON.stringify(dataInCorrectForm));
+                props.callback(dataInCorrectForm, result);
             });
         };
-
         reader.readAsText(file);
     }
 

@@ -3,9 +3,15 @@
         let model = {
             "key": data.model_id,
             "type": typeModel,
+            "tooltip": "double click to delete it",
             ...data
         }
-        addModel([...models, model]);
+        let dummyModel = models.findIndex((obj => obj.model_id === 1));
+        if (dummyModel !== -1) { // there is a dummy model in models
+            addModel([model]);
+        } else {
+            addModel([...models, model]);
+        }
     }
 
     function CreateModel(models, addModel, popMessage, updatePopMessage, typeModel, train_data) {
@@ -15,7 +21,7 @@
         fetch(url, {
                 method: "POST",
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: new URLSearchParams ({train_data: train_data})
+                body: new URLSearchParams ({train_data: JSON.stringify(train_data)})
             })
             .then(response => {
                 const data = response.json();
@@ -34,7 +40,7 @@
                 return null;
             })
             .catch(error => {
-                if (!popMessage.isAlter) {
+                if (!popMessage.isAlert) {
                     updatePopMessage(true, "Sorry! we have a problem", "there is a failure connection with API server. Please try again later.");
                 }
             })
