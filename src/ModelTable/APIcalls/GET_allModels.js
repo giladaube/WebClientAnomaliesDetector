@@ -16,7 +16,7 @@
                 let model = {
                     "key": m.model_id,
                     "type": "unknown",
-                    "tooltip": "it is not possible to delete it",
+                    "tooltip": "there is no information about this model. also, it is not possible to delete it",
                     ...m
                 }
                 models.push(model);

@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { CsvToHtmlTable } from 'react-csv-to-table';
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from 'react-bootstrap/Tooltip'
 import './App.css';
 import ModelTable from "./ModelTable/ModelTable";
 import UploadFile from "./AddData/UploadFile";
@@ -8,6 +10,10 @@ import {checkStatus} from "./ModelTable/APIcalls/GET_statusModel";
 import {deleteModel} from "./ModelTable/APIcalls/DELETE_deleteModel";
 import {DetectModel} from "./ModelTable/APIcalls/POST_detectAnomalies";
 import {getModels} from "./ModelTable/APIcalls/GET_allModels";
+import UploadTrainForm from "./AddData/UploadTrainForm";
+import UploadAnomalyForm from "./AddData/UploadAnomalyForm";
+import GetCharts from "./CreateCharts";
+
 
 
 function Model(props) {
@@ -85,63 +91,30 @@ function Model(props) {
 
     return (
             <div className="body-container">
-                <div className="row">
-                    <form className="col-3 text-left upload-data">
-                         <UploadFile placeholder="Load Train data (in csv format)" callback={setTrainFiles}/>
-
-                         <div className="row mb-3">
-                             <label className="form-label">Choose model's algorithm</label>
-                             <div>
-                                 <div className="form-check">
-                                     <input onClick={setType} className="form-check-input" name="radioFiled"
-                                            value="regression" type="radio" defaultChecked/>
-                                     <label className="form-check-label">regression</label>
-                                 </div>
-                                 <div className="form-check">
-                                     <input onClick={setType} className="form-check-input" name="radioFiled"
-                                            value="hybrid" type="radio"/>
-                                     <label className="form-check-label">hybrid</label>
-                                 </div>
-                             </div>
-                         </div>
-                            <div className="row mb-3">
-                                <button disabled={models.length === 0 ? gatherModels() : false} type="button" className="btn btn-primary" value="Train new model" onClick={trainModel}>
-                                    Train new model
-                                </button>
-                            </div>
-                    </form>
-                    <div className="row">
-                        <form className="col-3 text-left upload-data">
-                            <UploadFile placeholder="Load Anomaly data (in csv format)" callback={setAnomalyFiles}/>
-
-                            <div className="row mb-3">
-                                <div className="dropdown">
-                                    <button className="btn btn-primary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Choose Model to detect
-                                    </button>
-                                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        {models.length === 0 ? (
-                                            <li className="dropdown-item">There are no models to detect</li>) :
-                                            models.map(model => {
-                                                if (model.status === "ready" && model.type !== "unknown") {
-                                                    return (<li key={model.key} className="dropdown-item" id={model.model_id}
-                                                                onClick={setIdToDetect}>{model.type} model
-                                                        (id: {model.model_id})</li>)
-                                                }
-                                                return undefined;
-                                            })}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row mb-3">
-                                <button disabled={models.length === 0} type="button" className="btn btn-primary" value="create new model" onClick={detectModel}>
-                                    Get Anomalies
-                                </button>
-                            </div>
-                        </form>
+                <div className="row container-relative">
+                    <div className="">
+                        <div className="row">
+                        <UploadTrainForm header="Load Train data (in csv format)" setTrainFiles={setTrainFiles} models={models} gatherModels={gatherModels} setType={setType}
+                                         trainFile={trainFile} trainModel={trainModel} headerChoose="Choose model's algorithm" choice1="regression" choice2="hybrid"
+                                         tooltipLable="train a new model" buttonLabel="Train new model"/>
+                        </div>
+                        <div className="row">
+                            <UploadAnomalyForm header="Load Anomaly data (in csv format)" setAnomalyFiles={setAnomalyFiles} models={models} headerChoose="Choose Model to detect"
+                                               errorMessage="There are no models to detect" setIdToDetect={setIdToDetect} tooltipLable="detect anomalies" anomalyFile={anomalyFile}
+                                               detectModel={detectModel} buttonLabel="Get Anomalies"/>
+                        </div>
+                    </div>
+                    <div className="container top-0 start-0">
+                        {trainFile !== "" ?
+                            <div className="overflow-auto ">
+                                <GetCharts data={trainFile}/>
+                            </div> : undefined
+                        }
                     </div>
                 </div>
+
+
+
 
                 <div className="row">
                     <div className="col-3">
@@ -155,8 +128,7 @@ function Model(props) {
                     </div>
 
 
-                    <div className="col-9 overflow-auto models bottom-0 end-0">
-
+                    <div className="col-9 overflow-auto models bottom-0 end-0 margin-top">
                         <CsvToHtmlTable
                            data={trainCSV}
                            csvDelimiter=","
@@ -164,7 +136,8 @@ function Model(props) {
                         />
                     </div>
                 </div>
-            </div>)
+            </div>
+    )
 }
 
 export default Model;

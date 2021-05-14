@@ -7,6 +7,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 
 function ModelCard(props) {
     let initialColor = props.status === "ready" ? "green" : (props.status === "example" ? "blue" : "orange");
+    initialColor = props.type === "unknown" ? "lightgreen" : initialColor;
 
     const [model, setModel] = useState({
         id : props.model_id,
@@ -36,34 +37,26 @@ function ModelCard(props) {
     return (
                 <div onMouseOver={checkStatus} onDoubleClick={deleteModel}
                      className="model-card-container border rounded-pill" style={{backgroundColor: color}}>
+                        <OverlayTrigger data-bs-toggle="tooltip" data-bs-placement="top" overlay={<Tooltip id={model.id}>{props.tooltip}</Tooltip>}>
 
-                    {model.type !== "unknown"
-                        ?
-                        <OverlayTrigger
-                        overlay={
-                            <Tooltip data-bs-toggle="tooltip" id={model.id}>
-                                {props.tooltip}
-                            </Tooltip>
-                        }>
-                            <div>
-                                <ModelText
-                                    filed="type"
-                                    data={model.type}
-                                />
-                                <ModelText
-                                    filed="creation time"
-                                    data={model.type !== "hybrid or regression" ? model.time : props.time}
-                                />
-                            </div>
+                            {model.type !== "unknown"
+                                ?
+                                    <div>
+                                        <ModelText
+                                            filed="type"
+                                            data={model.type}
+                                        />
+                                        <ModelText
+                                            filed="creation time"
+                                            data={model.type !== "hybrid or regression" ? model.time : props.time}
+                                        />
+                                    </div>
+                                :
+                                    <div>
+                                        an active model from database
+                                    </div>
+                            }
                         </OverlayTrigger>
-                        :
-                        <div>
-                            There is no information about this model.
-                            <br/>
-                            it belongs to someone else
-                        </div>
-                    }
-
                 </div>
     )
 }
