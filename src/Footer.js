@@ -5,8 +5,10 @@ var year = (new Date()).getFullYear();
 
 function Footer() {
     return (
-       <div className="fixed-bottom">
-           <p className="footer"> Copyright {year}</p>
+       <div>
+           <label className="footer">
+               © Gilad Daube, Or Gottman, Yahel Jacobs, Tal Klein {year}
+           </label>
        </div>
     )
 }

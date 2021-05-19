@@ -2,7 +2,8 @@
 /*  ALL ELEMENTS */
 body {
     text-align: center;
-    background-color: antiquewhite;
+    background-color: #d8e3e7;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 .fixed-bottom {
@@ -31,14 +32,14 @@ body {
 .heading {
     color: white;
     text-align: left;
-    padding-left: 3%;
-    font-size: 2rem;
+    padding-left: 2%;
+    font-size: 2.7rem;
     font-family: "Itim",cursive;
 }
 
 .heading-container {
     padding: 0.5% 0;
-    background-color: orange;
+    background-color: #344fa1;
 }
 
 /*  Body.js */
@@ -79,6 +80,7 @@ body {
 
 /*  ModelCard.js  */
 .model-card-container {
+    position: relative;
     font-size: 0.95rem;
     font-stretch: condensed;
     line-height: 1.5;
@@ -88,9 +90,33 @@ body {
     margin: 0.15rem;
 }
 
+/*  ColorModel.js  */
+.color-model {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    top: 35%;
+    bottom: 35%;
+    border-radius: 50%;
+    border-color: whitesmoke;
+    border-width: 1px;
+    border-style: solid;
+    opacity: 100%;
+}
+
+/*  UploadAnomalyForm.js  */
+.dropdown-padding {
+    padding-right: 3%;
+}
+.dropdown-color {
+    padding: 3%;
+    position: absolute;
+    display: inline;
+}
+
 /*  CreateChart.js  */
 .charts-container {
-    position:absolute;
+    position: relative;
     margin-right: 0;
     padding-right: 0;
     width: 70%;
@@ -99,14 +125,11 @@ body {
     top: 0;
     margin-bottom: 2rem;
 }
-/*  Footer.js  */
-.footer-container {
-    position: relative;
-}
 
+/*  Footer.js  */
 .footer {
-    position:absolute;
+    text-align: center;
     color: gray;
-    padding-bottom: 0;
-    margin-bottom: 0;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
 }

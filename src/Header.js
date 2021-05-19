@@ -4,7 +4,7 @@ import './App.css';
 function Header() {
     return (
         <div className="heading-container">
-           <h1 className="heading"> Gilad's APP </h1>
+           <h1 className="heading"> Anomalies Detector </h1>
         </div>
     )
 }

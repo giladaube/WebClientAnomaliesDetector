@@ -2,12 +2,11 @@ import React from 'react';
 import '../App.css';
 
 function ModelText(props) {
-
-
-
     return (
         <div>
-            {props.filed}: {props.data}
+            <label>
+                {props.field}: {props.data}
+            </label>
         </div>
 
     )
