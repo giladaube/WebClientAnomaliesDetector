@@ -1,169 +1,141 @@
 import React, {useState} from "react";
 import {Scatter} from "react-chartjs-2";
 import {MDBContainer} from "mdbreact";
-import {randomColor} from "randomcolor";
-import Dropdown from 'react-dropdown';
+import Select from "react-select";
 import 'react-dropdown/style.css';
 
 function GetCharts(props) {
+
+    const [giveData, setGivenData] = useState({
+        data: undefined,
+        span: undefined
+    });
+
+    const [selectedValue, setSelectedValue] = useState("");
 
     const isTrain = props.isTrain;
     const data = props.data;
     const categories = Object.keys(data);
 
-    function getRows() {
-        let tempRows = [];
-        const colSize = categories.length;
-        const rowSize = data[categories[0]].length;
-        for (let r = 0; r < rowSize; r++) {
-            let row = [];
-            for (let k = 0; k < colSize; k++) {
-                row.push(data[categories[k]][r]);
-            }
-            tempRows.push(row);
-        }
-        return tempRows;
-    }
-
-    function getCol(feature) {
-        let colValues = [];
-        let colNum = -1;
-        for (let i = 0; i < categories.length; i++) {
-            if (categories[i] === feature) {
-                colNum = i;
-            }
-        }
-
-        console.log(data[feature]);
-
-
-    }
-
-    function getValues() {
-        let sets = [];
-        let color;
-        let rows = getRows();
-        for (let i = 0; i < data[categories[0]].length; i++) {
-            color = randomColor();
-            let set = {
-                label: "timestep-" + i,
-                fill: true,
-                lineTension: 0.3,
-                backgroundColor: color,
-                borderColor: color,
-                borderCapStyle: "butt",
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: "miter",
-                pointBorderColor: color,
-                pointBackgroundColor: color,
-                pointBorderWidth: 10,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: color,
-                pointHoverBorderColor: color,
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: rows[i]
-            }
-            sets.push(set);
-        }
-        return sets;
-    }
-
     const [dataLine, setChartData] = useState({})
 
     function setData(feature) {
-
+        setSelectedValue(feature);
         let yValues = data[feature.value]
         let points = []
         let anomalousPoints = []
 
-        if (isTrain) {
-            for (let i = 0; i < data[feature].length; i += 2) {
-                points.push({x: i, y: yValues[i]})
-            }
-
-            setChartData({
-                datasets: [
-                    {
-                        label: 'Regular Points',
-                        data: points,
-                        backgroundColor: 'blue'
-                    },
-                ],
-            })
-
-        } else {
-
-            let span = {
-                "A-B": [[4, 5], [6, 2]],
-                "C-D": [[24, 30], [10, 12]]
-            }
-
-            //let span = props.span.anomalies;
+        if (!isTrain) {
+            let span = props.span;
 
             let ranges = []
             let firstFeature = "", secondFeature = ""
-            for (let key in span) {
+            const keys = Object.keys(span);
+            keys.forEach(key => {
                 let SplitTitles = key.split("-")
-                if (feature === SplitTitles[0]) {
+                if (feature.value === SplitTitles[0]) {
                     firstFeature = SplitTitles[0]
                     secondFeature = SplitTitles[1]
                     ranges = span[key]
+                } else if (feature.value === SplitTitles[1]) {
+                    secondFeature = SplitTitles[0]
+                    firstFeature = SplitTitles[1]
+                    ranges = span[key]
                 }
-            }
+            })
 
             if (firstFeature === "") {
-                return
+                featureByTime(feature, yValues, points);
+                return;
             }
 
             let xValues = data[secondFeature]
 
-            for (let i = 0; i < data[feature].length; i++) {
+            for (let i = 0; i < data[feature.value].length; i++) {
                 points.push({x: xValues[i], y: yValues[i]})
-                for (let range in ranges) {
+                ranges.forEach(range => {
                     if (i > range[0] && i < range[1]) {
                         anomalousPoints.push({x: xValues[i], y: yValues[i]})
                     }
-                }
+                })
             }
 
-            setChartData({
-                datasets: [
+            let sets = [
+                {
+                    label: 'Regular Points',
+                    data: points,
+                    backgroundColor: 'blue'
+                },
+            ]
+
+            if (anomalousPoints.length > 0) {
+                sets.push(
                     {
                         label: 'Anomalous Points',
                         data: anomalousPoints,
                         backgroundColor: 'red'
-                    },
-                    {
-                        label: 'Regular Points',
-                        data: points,
-                        backgroundColor: 'blue'
-                    },
-                ],
+                    })
+            }
+            setChartData({
+                datasets: sets
             })
+
+        } else {
+            featureByTime(feature, yValues, points);
         }
     }
 
+    function featureByTime(feature, yValues, points) {
+        for (let i = 0; i < data[feature.value].length; i += 2) {
+            points.push({x: i, y: yValues[i]})
+        }
 
+        setChartData({
+            datasets: [
+                {
+                    label: 'Regular Points',
+                    data: points,
+                    backgroundColor: 'blue'
+                },
+            ],
+        })
+    }
 
-return (
-    <div className="charts-container overflow-auto">
-        <MDBContainer>
-            <h3 className="mt-5">Line Chart</h3>
-            <Dropdown
-                placeholder="Select an option"
-                options={categories}
-                value="Choose a Feature"
-                onChange={(value) => setData(value)}
+    function setDefaultValue() {
+        let value = {value: categories[0], label: categories[0]};
+        if (giveData.data !== data || giveData.span !== props.span) {
+            setGivenData({
+                data: props.data,
+                span: props.span
+            });
+            setData(value);
+            return selectedValue;
+        }
+    }
 
-            />
-            {/*<Dropdown options={options} onChange={()=>{console.log("HELLO")}} value={defaultOption} placeholder="Select an option" />*/}
-            <Scatter data={dataLine} options={{responsive: true, plugins: {legend: {display: true}}}}/>
-        </MDBContainer>
-    </div>
-)
+    const options = categories.map(value=> {
+        return (
+            {
+                value: value,
+                label: value
+            }
+        )
+    })
+
+    return (
+        <div className="charts-container overflow-auto">
+            <MDBContainer>
+                <Select
+                    id="dropdown"
+                    onChange={(value) => setData(value)}
+                    options={options}
+                    value={selectedValue}
+                    defaultValue={setDefaultValue()}
+                />
+                <Scatter data={dataLine} options={{responsive: true, plugins: {legend: {display: true}}}}/>
+            </MDBContainer>
+        </div>
+    )
 
 }
 

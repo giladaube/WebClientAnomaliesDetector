@@ -190,14 +190,14 @@ function Model(props) {
                                                buttonLabel="Get Anomalies"/>
                         </div>
                     </div>
-                    {/*  chart component */}
-                    {/*<div className="container top-0 start-0">*/}
-                    {/*    {displayData.file !== "" ?*/}
-                    {/*        <div className="overflow-auto">*/}
-                    {/*            <GetCharts isTrain={displayData.span === undefined} data={displayData.file} span={displayData.span === "" ? undefined : displayData.span}/>*/}
-                    {/*        </div> : undefined*/}
-                    {/*    }*/}
-                    {/*</div>*/}
+                    {/*chart component*/}
+                    <div className="container top-0 start-0 ">
+                        {displayData.file !== "" ?
+                            <div className="overflow-auto">
+                                <GetCharts isTrain={displayData.span === undefined || displayData.span === ""} data={displayData.file} span={displayData.span}/>
+                            </div> : undefined
+                        }
+                    </div>
                 </div>
 
                 <div className="row">
@@ -215,6 +215,7 @@ function Model(props) {
 
 
                     <div className="col-9 overflow-auto models bottom-0 end-0 margin-top">
+                    {/*<div className="col-9 overflow-auto models bottom-0 end-0">*/}
                         {/* display the given csv-data in a table */}
                         <DataTable data={displayData.csv}/>
                     </div>

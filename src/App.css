@@ -45,6 +45,8 @@ body {
 /*  Body.js */
 .body-container {
     position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 /*  AlertMessage.js  */
@@ -116,14 +118,15 @@ body {
 
 /*  CreateChart.js  */
 .charts-container {
-    position: relative;
+    position: absolute;
     margin-right: 0;
     padding-right: 0;
     width: 70%;
-    height: 70%;
-    right: 0;
-    top: 0;
-    margin-bottom: 2rem;
+    height: 65%;
+    right: 2%;
+    top: 3%;
+    bottom: 3%;
+    /*margin-bottom: 2rem;*/
 }
 
 /*  Footer.js  */
