@@ -12,8 +12,9 @@
     }
 
     // using api call. get update data for given model
-    function checkStatus(models, addModel, popMessage, updatePopMessage, model, callback) {
-        let url = new URL("http://localhost:9876/api/model"),
+    function checkStatus(uri_apiServer, models, addModel, popMessage, updatePopMessage, model, callback) {
+        const api_uri = uri_apiServer + "/model";
+        let url = new URL(api_uri),
                     // asking for data about the given model, by it's id
                     params = {model_id: model.model_id}
                     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
