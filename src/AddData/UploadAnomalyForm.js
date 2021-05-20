@@ -1,19 +1,44 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../App.css';
 import UploadFile from "./UploadFile";
 import ColorModel from "../ModelTable/ColorModel";
 
 function UploadAnomalyForm(props) {
+    // set the title of the dropdown menu
+    const [dropdownHeader, setDropdownHeader] = useState(props.headerChoose);
     // set "anomaly" button to be disable until csv file has been uploaded
     const [enableUpload, setEnableUpload] =  useState(true);
     // array of models which detect was used on
     const [detectedAnomalies, setDetectedAnomalies] = useState([]);
+
     // define which model should it detect
     const [detectId, setDetectId] = useState(undefined);
 
     // set selected id model and dropdown header menu
     function setIdToDetect(event) {
         setDetectId(event.target.id);
+        setHeader(event.target.id);
+    }
+
+    // change dropdown header to match chosen model
+    function setHeader(id) {
+        let model = props.models.find(function (currentValue) {return currentValue.key === id});
+
+        // create new header (include model's identify color)
+        if (model !== undefined) {
+            const header =
+                ( <div className="p-3 d-inline">
+                    {/* add this model color to identify it easily */}
+                    <div key={model.key} className="d-inline">
+                        {/* add identify color */}
+                        <ColorModel color={model.color}/>
+                        <div className="d-inline p-2">
+                            {model.type} model
+                        </div>
+                    </div>
+                </div>);
+            setDropdownHeader(header);
+        }
     }
 
     // upload csv anomaly-data
@@ -43,6 +68,7 @@ function UploadAnomalyForm(props) {
             // set detectId and dropdownHeader back to default values
             addDetectedAnomalies(detectId);
             setDetectId("");
+            setDropdownHeader(props.headerChoose)
         });
     }
 
@@ -56,7 +82,7 @@ function UploadAnomalyForm(props) {
                         {/* choose the model to detect anomalies on */}
                         <button disabled={enableUpload} className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                 aria-expanded="true">
-                            {props.headerChoose}
+                            {dropdownHeader}
                         </button>
                         <ul className="dropdown-menu dropdown-padding" aria-labelledby="dropdownMenuButton1">
                             {props.models.filter(function (currentValue) {return currentValue.couldDetect}).length === 0
