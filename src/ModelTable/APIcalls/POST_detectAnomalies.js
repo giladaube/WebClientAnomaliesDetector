@@ -14,8 +14,9 @@
     }
 
     // using api call. detect anomalies in the given model (using anomaly_data)
-    function DetectModel(anomalies, addAnomaly, popMessage, updatePopMessage, model, anomaly_file, anomaly_csv) {
-        let url = new URL("http://localhost:9876/api/anomaly"),
+    function DetectModel(uri_apiServer, anomalies, addAnomaly, popMessage, updatePopMessage, model, anomaly_file, anomaly_csv) {
+        const api_uri = uri_apiServer + "/anomaly";
+        let url = new URL(api_uri),
                         // asking to detect anomalies in the given model, by it's id
                         params = {model_id: model.model_id}
                         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))

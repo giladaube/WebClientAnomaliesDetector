@@ -8,6 +8,7 @@ import {randomColor} from "randomcolor";
             type: typeModel,
             tooltip: "one click to see anomalies, double click to delete it",
             color: randomColor(),
+            couldDetect: true,
             ...data
         }
         // find out if there is pre-existed dummy model, if there is it will override it
@@ -20,8 +21,9 @@ import {randomColor} from "randomcolor";
     }
 
     // using api call. create new model and train it
-    function CreateModel(models, addModel, popMessage, updatePopMessage, typeModel, train_data) {
-        let url = new URL("http://localhost:9876/api/model"),
+    function CreateModel(uri_apiServer, models, addModel, popMessage, updatePopMessage, typeModel, train_data) {
+        const api_uri = uri_apiServer + "/model";
+        let url = new URL(api_uri),
                         // train the new model based on the typeModel algorithm
                         params = {model_type: typeModel}
                         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))

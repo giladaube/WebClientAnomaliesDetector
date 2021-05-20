@@ -1,8 +1,8 @@
 
     // sends array with all pre-existed models, using callback function
-    function getModels(popMessage, updatePopMessage, callback) {
+    function getModels(uri_apiServer, popMessage, updatePopMessage, callback) {
         let existModels = [];
-        setExistModels(popMessage, updatePopMessage, function (models) {
+        setExistModels(uri_apiServer, popMessage, updatePopMessage, function (models) {
             existModels = [...models];
             callback(existModels);
         })
@@ -21,6 +21,7 @@
                     type: "unknown",
                     tooltip: "there is no information about this model. also, it is not possible to delete it",
                     color: undefined,
+                    couldDetect: false,
                     ...existModel
                 }
                 models.push(model);
@@ -34,7 +35,8 @@
                 upload_time: "the creation time of this model",
                 status: "example",
                 tooltip: "this is an example trained model (remove it by train a new model)",
-                color: "whitesmoke"
+                color: "whitesmoke",
+                couldDetect: false
             }
             models.push(model);
         }
@@ -43,8 +45,9 @@
     }
 
     // using api call. get all pre-existed models
-    function setExistModels(popMessage, updatePopMessage, callback) {
-        fetch("http://localhost:9876/api/models", {
+    function setExistModels(uri_apiServer, popMessage, updatePopMessage, callback) {
+        const api_uri = uri_apiServer + "/models";
+        fetch(api_uri, {
                 method: "GET",
             })
             .then(response => {

@@ -28,6 +28,9 @@ function UploadFile(props) {
                 });
             };
             reader.readAsText(file);
+        } else {
+            // delete previous data
+            props.callback("", "");
         }
     }
 

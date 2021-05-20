@@ -9,13 +9,17 @@ function UploadTrainForm(props) {
      */
     const [modelType, setModelType] = useState(props.choice1);
     // set "train" button to be disable until csv file has been uploaded
-    const [upload, setUpload] =  useState(true);
+    const [enableUpload, setEnableUpload] =  useState(true);
 
     // upload csv train-data
     function setTrainFiles(file, csv) {
         props.setDisplayFiles(file, csv);
         // make "train" button enable
-        setUpload(false);
+        if (file !== "") {
+            setEnableUpload(false);
+        } else {
+            setEnableUpload(true);
+        }
     }
     // add selected train-algorithm to modelType
     function setType(event) {
@@ -48,7 +52,7 @@ function UploadTrainForm(props) {
                     </div>
                 </div>
                 <div className="row mb-3">
-                    <button disabled={upload} type="button" className="btn btn-primary" onClick={train}>
+                    <button disabled={enableUpload} type="button" className="btn btn-primary" onClick={train}>
                         {props.buttonLabel}
                     </button>
                 </div>
