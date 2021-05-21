@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Scatter} from "react-chartjs-2";
+import {defaults, Scatter} from "react-chartjs-2";
 import {MDBContainer} from "mdbreact";
 import Select from "react-select";
 import 'react-dropdown/style.css';
@@ -113,7 +113,7 @@ function GetCharts(props) {
         }
     }
 
-    const options = categories.map(value=> {
+    const options = categories.map(value => {
         return (
             {
                 value: value,
@@ -122,18 +122,25 @@ function GetCharts(props) {
         )
     })
 
+    defaults.animation = false
+
     return (
         <div className="charts-container overflow-auto">
-            <MDBContainer>
-                <Select
-                    id="dropdown"
-                    onChange={(value) => setData(value)}
-                    options={options}
-                    value={selectedValue}
-                    defaultValue={setDefaultValue()}
-                />
-                <Scatter data={dataLine} options={{responsive: true, plugins: {legend: {display: true}}}}/>
-            </MDBContainer>
+            {props.data !== "" ?
+                <MDBContainer>
+                    <Select
+                        id="dropdown"
+                        onChange={(value) => setData(value)}
+                        options={options}
+                        value={selectedValue}
+                        defaultValue={setDefaultValue()}
+                    />
+                    <Scatter data={dataLine} options={{responsive: true, plugins: {legend: {display: true}}}}/>
+                </MDBContainer> :
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            }
         </div>
     )
 

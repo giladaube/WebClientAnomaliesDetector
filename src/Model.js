@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import ModelTable from "./ModelTable/ModelTable";
 import {CreateModel} from "./ModelTable/APIcalls/POST_createModel";
@@ -8,8 +8,8 @@ import {DetectModel} from "./ModelTable/APIcalls/POST_detectAnomalies";
 import {getModels} from "./ModelTable/APIcalls/GET_allModels";
 import UploadTrainForm from "./AddData/UploadTrainForm";
 import UploadAnomalyForm from "./AddData/UploadAnomalyForm";
-import DataTable from "./ModelTable/DataTable";
 import GetCharts from "./CreateCharts";
+import Table from "./ModelTable/Table";
 
 const uri_apiServer = "http://localhost:9876/api";
 
@@ -69,12 +69,26 @@ function Model(props) {
      */
     const [anomalies, addAnomaly] = useState([]);
 
+
+    useEffect(() => {
+        let pendingModels = models.filter(model => model.status === "pending");
+        if (pendingModels.length > 0) {
+            pendingModels.forEach(model => {
+                updateStatus(model, function (rcv) {
+
+                })
+            })
+        }
+        console.log(pendingModels);
+    })
+
+
     // add previous models to display
     function gatherModels() {
-       getModels(uri_apiServer, popMessage, updatePopMessage, function (models) {
+        getModels(uri_apiServer, popMessage, updatePopMessage, function (models) {
             addModel([...models]);
         });
-       return true;
+        return true;
     }
 
     // set state of trainData and display it via displayData
@@ -101,9 +115,9 @@ function Model(props) {
         if (span !== undefined)
             updateSpan = span;
         setDisplayData({
-                file: file,
-                csv: csv,
-                span: updateSpan
+            file: file,
+            csv: csv,
+            span: updateSpan
         });
     }
 
@@ -122,9 +136,13 @@ function Model(props) {
     // using displayData to detect anomalies in the given model (using api call)
     function detectModel(id, callback) {
         // let detect each model only once
-        if (anomalies.find(function (currentValue) {return currentValue.id === id}) === undefined) {
+        if (anomalies.find(function (currentValue) {
+            return currentValue.id === id
+        }) === undefined) {
             // make sure the requested model exist
-            let thisModel = models.find(function (currentValue) {return currentValue.model_id === id});
+            let thisModel = models.find(function (currentValue) {
+                return currentValue.model_id === id
+            });
             if (thisModel === undefined) {
                 updatePopMessage(true, "There is a problem", "please try again");
             } else {
@@ -160,6 +178,7 @@ function Model(props) {
     }
 
     const dummyModelId = 1;
+
     // using api call to delete the given model
     function deleteOneModel(model) {
         // can't delete the dummy model
@@ -174,53 +193,53 @@ function Model(props) {
     }
 
     return (
-            <div className="body-container">
-                <div className="row container-relative">
-                    <div className="">
-                        <div className="row">
-                            {/*  form to upload data in order to train new model  */}
-                            <UploadTrainForm header="Load Train data (in csv format)" models={models} gatherModels={gatherModels} setDisplayFiles={setTrainFiles}
-                                             trainModel={trainModel} headerChoose="Choose model's algorithm" choice1="regression" choice2="hybrid"
-                                             buttonLabel="Train new model"/>
-                        </div>
-                        <div className="row">
-                            {/*  form to upload data in order to detect anomaly in exist-trained model  */}
-                            <UploadAnomalyForm header="Load Anomaly data (in csv format)" setDisplayFiles={setAnomalyFiles} models={models} headerChoose="Choose Model to detect"
-                                               errorMessage="There are no models to detect" detectModel={detectModel}
-                                               buttonLabel="Get Anomalies"/>
-                        </div>
+        <div className="body-container">
+            <div className="row container-relative">
+                <div className="">
+                    <div className="row">
+                        {/*  form to upload data in order to train new model  */}
+                        <UploadTrainForm header="Load Train data (in csv format)" models={models}
+                                         gatherModels={gatherModels} setDisplayFiles={setTrainFiles}
+                                         trainModel={trainModel} headerChoose="Choose model's algorithm"
+                                         choice1="regression" choice2="hybrid"
+                                         buttonLabel="Train new model"/>
                     </div>
-                    {/*chart component*/}
-                    <div className="container top-0 start-0 ">
-                        {displayData.file !== "" ?
-                            <div className="overflow-auto">
-                                <GetCharts isTrain={displayData.span === undefined || displayData.span === ""} data={displayData.file} span={displayData.span}/>
-                            </div> : undefined
-                        }
+                    <div className="row">
+                        {/*  form to upload data in order to detect anomaly in exist-trained model  */}
+                        <UploadAnomalyForm header="Load Anomaly data (in csv format)" setDisplayFiles={setAnomalyFiles}
+                                           models={models} anomalies={anomalies} headerChoose="Choose Model to detect"
+                                           errorMessage="There are no models to detect" detectModel={detectModel}
+                                           buttonLabel="Get Anomalies"/>
                     </div>
                 </div>
-
-                <div className="row">
-                    <div className="col-3">
-                         {/* add each model to a list */}
-                         <div className="models overflow-auto">
-                            <ModelTable
-                                cards={models}
-                                checkStatus={updateStatus}
-                                deleteModel={deleteOneModel}
-                                displayAnomalies={displayAnomalies}
-                            />
-                        </div>
-                    </div>
-
-
-                    <div className="col-9 overflow-auto models bottom-0 end-0 margin-top">
-                    {/*<div className="col-9 overflow-auto models bottom-0 end-0">*/}
-                        {/* display the given csv-data in a table */}
-                        <DataTable data={displayData.csv}/>
+                {/*chart component*/}
+                <div className="container top-0 start-0 ">
+                    <div className="overflow-auto">
+                        <GetCharts isTrain={displayData.span === undefined || displayData.span === ""}
+                                   data={displayData.file} span={displayData.span}/>
                     </div>
                 </div>
             </div>
+
+            <div className="row">
+                <div className="col-3">
+                    {/* add each model to a list */}
+                    <div className="models overflow-auto">
+                        <ModelTable
+                            cards={models}
+                            deleteModel={deleteOneModel}
+                            displayAnomalies={displayAnomalies}
+                        />
+                    </div>
+                </div>
+
+
+                <div className="col-9 overflow-auto models bottom-0 end-0 margin-top">
+                    {/* display the given csv-data in a table */}
+                    <Table data={displayData.file} span={displayData.span}/>
+                </div>
+            </div>
+        </div>
     )
 }
 

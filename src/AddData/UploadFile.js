@@ -9,16 +9,16 @@ function UploadFile(props) {
         let file = event.target.files[0];
         if (file !== undefined) {
             let reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 // The file's text will be printed here
                 result = event.target.result;
-                CSVToJSON().fromString(result).then(listOfJsons =>{
+                CSVToJSON().fromString(result).then(listOfJsons => {
                     let features = listOfJsons[0];     // get the first row (which contains the names of the features).
                     let dataInCorrectForm = {};     // the data object to be used by the server side (in JSON format)
                     for (let key in features) {     // initialize the object by setting the entries to be the features given in the csv
                         dataInCorrectForm[key.toString()] = []     // each feature maps to an array of values.
                     }
-                    listOfJsons.forEach(json=>{     // add the values correctly into each feature accordingly
+                    listOfJsons.forEach(json => {     // add the values correctly into each feature accordingly
                         for (let key in json) {
                             dataInCorrectForm[key].push(json[key])    // can convert the value to float with parseFloat(value) if needed
                         }
@@ -33,7 +33,6 @@ function UploadFile(props) {
             props.callback("", "");
         }
     }
-
 
     return (
         <div className="row mb-3">

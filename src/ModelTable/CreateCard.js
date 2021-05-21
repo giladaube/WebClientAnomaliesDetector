@@ -8,15 +8,14 @@ function CreateCard(props) {
 
     return (
         <ModelCard
-            key = {card.key}
-            model_id = {card.model_id}
-            time = {card.upload_time}
-            status = {card.status}
-            type = {card.type}
-            tooltip = {card.tooltip}
-            color = {card.color}
+            key={card.key}
+            model_id={card.model_id}
+            time={card.upload_time}
+            status={card.status}
+            type={card.type}
+            tooltip={card.tooltip}
+            color={card.color}
             // function to use when click, hover etc. on card-model
-            checkStatus={props.checkStatus}
             deleteModel={props.deleteModel}
             displayAnomalies={props.displayAnomalies}
         />
