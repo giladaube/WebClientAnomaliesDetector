@@ -39,7 +39,7 @@
             .then(data => {
                 if (data !== undefined) {
                     // got data back form the api call, create new anomaly model connect it to model id of this model
-                    updatePopMessage(true,"Some anomalies has been detected", "you can see a chart with the results. enjoy!", model.color);
+                    updatePopMessage(true,"Some anomalies has been detected", "you can see the results by hover your model. enjoy!", model.color);
                     addAnomalies(anomalies, addAnomaly, data, anomaly_file, anomaly_csv, model.model_id, model.type);
                 }
                 return null;
