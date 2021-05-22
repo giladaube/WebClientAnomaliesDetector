@@ -1,3 +1,4 @@
+import React from 'react';
 import '../App.css';
 import Toast from 'react-bootstrap/Toast';
 import ColorModel from "./ColorModel";
